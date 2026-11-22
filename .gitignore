@@ -1,0 +1,17 @@
+# binaries (go build . names it after the module: mental-rotation-preparation)
+/mental-rotation-preparation
+/mental-rotation-preparation.exe
+/dist/
+
+# Jekyll and browser-bundle build output
+/_site/
+
+# Participant data are committed. Screenshots and the early test runs made
+# under the program's old name are not.
+/data/*.png
+/data/Preparation-Rotation_*
+
+__pycache__/
+
+# The Cooper & Shepard (1973) article is copyrighted: kept locally only
+/paper/

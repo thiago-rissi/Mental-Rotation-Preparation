@@ -1,0 +1,92 @@
+# Deploys the GitHub Pages site:
+#
+#   /              the report: README.md built by Jekyll with the Cayman theme
+#                  (see _config.yml)
+#   /experiment/   the browser build of Mental-Rotation-Preparation
+#
+# The browser bundle is made by the wasmsdl bundler of the go-sdl3 fork pinned
+# in go.mod (the same replace line every build uses), so what is deployed is
+# exactly what `./build.sh web` builds locally.
+#
+# Desktop binaries are built by the separate release.yml.
+#
+# Setup, once: Settings > Pages > Source: "GitHub Actions".
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push supersedes an older one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Check the browser build compiles and the tests pass
+        run: |
+          go test ./...
+          GOOS=js GOARCH=wasm go vet ./...
+
+      # Built outside the workspace, so that Jekyll does not pick it up as a
+      # source folder.
+      - name: Build the browser version of the experiment
+        run: ./build.sh web "$RUNNER_TEMP/experiment"
+
+      - uses: actions/configure-pages@v5
+
+      - name: Build the report with Jekyll (README.md, theme from _config.yml)
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      # jekyll-build-pages runs in a container as root, so _site belongs to root.
+      - name: Add the experiment under /experiment/
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" _site
+          cp -r "$RUNNER_TEMP/experiment" _site/experiment
+          ls -lR _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy1.outputs.page_url || steps.deploy2.outputs.page_url || steps.deploy3.outputs.page_url }}
+    steps:
+      # Pages deployments intermittently fail with "Deployment failed, try again
+      # later"; retry twice with backoff (as in chrplr/Rush-Hour).
+      - id: deploy1
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - if: steps.deploy1.outcome == 'failure'
+        run: sleep 20
+      - id: deploy2
+        if: steps.deploy1.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        run: sleep 30
+      - id: deploy3
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        uses: actions/deploy-pages@v4

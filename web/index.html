@@ -1,0 +1,208 @@
+<!doctype html>
+<!--
+  Copyright (2026) Thiago Lizier Rissi
+  Launch page of the browser build of Mental-Rotation-Preparation.
+  ./build.sh web bundles it with sdl.js, sdl.wasm, wasm_exec.js and main.wasm.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mental-Rotation-Preparation</title>
+    <style>
+      :root {
+        --bg: #f4f5f7;
+        --fg: #1c1c2e;
+        --accent: #3b4ec8;
+        --muted: #5c5d6a;
+        --line: #c4c7d0;
+        --error: #b3261e;
+      }
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      body { display: flex; align-items: center; justify-content: center; }
+
+      #launcher { max-width: 34rem; padding: 2rem; line-height: 1.5; }
+      #launcher h1 { margin: 0 0 1rem; font-size: 1.8rem; font-weight: 600; }
+      #launcher p { margin: 0 0 1.5rem; }
+      .field { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+      .field label { font-size: 1rem; }
+      .field input {
+        width: 5rem;
+        padding: .5rem .6rem;
+        font: inherit;
+        color: var(--fg);
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+      }
+      .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+      button {
+        padding: .55rem 1.5rem;
+        font: inherit;
+        font-weight: 600;
+        color: #fff;
+        background: var(--accent);
+        border: 0;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      button:disabled { opacity: .45; cursor: default; }
+      #status { margin-top: 1rem; min-height: 1.4em; font-size: .9rem; color: var(--muted); }
+      #status.error { color: var(--error); }
+
+      /* SDL's web backend takes its window size from the canvas CSS box, so the
+         canvas must be laid out (not display:none) when Go creates the window.
+         It stays invisible until Start. */
+      #canvas { display: block; outline: none; }
+      body.running #launcher { display: none; }
+      body:not(.running) #canvas { position: absolute; visibility: hidden; }
+
+      /* The only resizing: a uniform scale(), applied after SDL has sized its
+         window, so a viewport smaller than 1024x768 shows the whole canvas.
+         Emscripten maps input through getBoundingClientRect, which accounts
+         for the transform. */
+      body.running { overflow: hidden; }
+      body.running #canvas { transform: scale(var(--fit, 1)); }
+    </style>
+  </head>
+  <body>
+    <div id="launcher">
+      <h1>Rotated Characters</h1>
+      <p>The session takes about ten minutes and needs a computer with a keyboard.</p>
+      <div class="field">
+        <label for="participant">Participant number</label>
+        <input id="participant" type="text" inputmode="numeric" maxlength="2" autocomplete="off" />
+        <button id="start" disabled>Start</button>
+      </div>
+      <div id="status" role="status"></div>
+    </div>
+
+    <canvas id="canvas" tabindex="0" oncontextmenu="event.preventDefault()"></canvas>
+
+    <script>
+      const canvasElement = document.getElementById('canvas');
+      const startButton = document.getElementById('start');
+      const participantField = document.getElementById('participant');
+      const statusLine = document.getElementById('status');
+
+      function setStatus(text, isError) {
+        statusLine.textContent = text;
+        statusLine.classList.toggle('error', !!isError);
+      }
+
+      const params = new URLSearchParams(location.search);
+      if (params.get('s') !== null) participantField.value = params.get('s');
+
+      // Without the COOP/COEP headers (GitHub Pages cannot send them) the browser
+      // clock ticks at ~100 us instead of ~5 us. Recorded here for the
+      // experimenter; irrelevant to the participant.
+      console.log('crossOriginIsolated:', window.crossOriginIsolated);
+
+      canvasElement.addEventListener('webglcontextlost', (e) => {
+        e.preventDefault();
+        setStatus('The display was lost. Please reload the page.', true);
+      }, false);
+
+      // Emscripten module hosting SDL3. MODULARIZE=0: sdl.js reads this global.
+      var Module = {
+        print(...args) { console.log(...args); },
+        printErr(...args) { console.error(...args); },
+        canvas: canvasElement,
+        onRuntimeInitialized() { sdlReady = true; maybeReady(); },
+      };
+      let sdlReady = false;
+      let goReady = false;
+    </script>
+
+    <script src="sdl.js"></script>
+    <script src="wasm_exec.js"></script>
+    <script>
+      if (!WebAssembly.instantiateStreaming) {
+        WebAssembly.instantiateStreaming = async (resp, importObject) => {
+          const source = await (await resp).arrayBuffer();
+          return await WebAssembly.instantiate(source, importObject);
+        };
+      }
+
+      const go = new Go();
+      let goInstance = null;
+
+      setStatus('Loading...');
+      WebAssembly.instantiateStreaming(fetch('main.wasm'), go.importObject)
+        .then((result) => { goInstance = result.instance; goReady = true; maybeReady(); })
+        .catch((err) => {
+          console.error(err);
+          setStatus('The experiment could not be loaded. Please reload the page.', true);
+        });
+
+      function maybeReady() {
+        if (!sdlReady || !goReady) return;
+        startButton.disabled = false;
+        setStatus('');
+        participantField.focus();
+        // Test hook: ?autostart presses Start once loaded (headless checks).
+        if (params.has('autostart')) startButton.click();
+      }
+
+      // The participant number must be a whole number from 1 to 99.
+      function participantNumber() {
+        const text = participantField.value.trim();
+        if (!/^[0-9]{1,2}$/.test(text)) return null;
+        const n = parseInt(text, 10);
+        return n >= 1 && n <= 99 ? n : null;
+      }
+
+      startButton.addEventListener('click', () => {
+        const n = participantNumber();
+        if (n === null) {
+          setStatus('Please enter a whole number from 1 to 99.', true);
+          participantField.focus();
+          return;
+        }
+        startButton.disabled = true;
+        setStatus('');
+
+        // The Go side reads its flags from location.search at startup, so the
+        // number is written there first (no reload).
+        params.set('s', String(n));
+        params.delete('autostart');
+        history.replaceState(null, '', location.pathname + '?' + params.toString());
+
+        // Lay out and focus the canvas before SDL measures it.
+        document.body.classList.add('running');
+        canvasElement.focus();
+        void canvasElement.offsetWidth;
+
+        // Run Go from a fresh task, not inside this click handler: the
+        // experiment blocks its main goroutine for the whole session, and the
+        // wasm scheduler can only park it (so DOM events keep reaching SDL)
+        // when it is not nested inside another callback.
+        setTimeout(() => {
+          go.run(goInstance).then(() => console.log('experiment finished'));
+        }, 0);
+      });
+
+      participantField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !startButton.disabled) startButton.click();
+      });
+
+      // Shrink the canvas uniformly when the window is smaller than it.
+      function fitCanvas() {
+        if (!document.body.classList.contains('running')) return;
+        const w = canvasElement.width || canvasElement.clientWidth;
+        const h = canvasElement.height || canvasElement.clientHeight;
+        if (!w || !h) return;
+        const fit = Math.min(1, window.innerWidth / w, window.innerHeight / h);
+        document.documentElement.style.setProperty('--fit', fit.toFixed(4));
+      }
+      window.addEventListener('resize', fitCanvas);
+      setInterval(fitCanvas, 500);
+    </script>
+  </body>
+</html>
