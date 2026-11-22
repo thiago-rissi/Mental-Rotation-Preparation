@@ -102,7 +102,7 @@ See the next section.
 
 ## Source code
 
-The course asked for "le code source *portable* du programme expérimental, pouvant s'installer et s'exécuter facilement sur n'importe quel ordinateur". The experiment is written in [Go](https://go.dev) with the [goxpyriment](https://chrplr.github.io/goxpyriment/) library, which relies on SDL3 for display and keyboard input. Go compiles the program, the font and the SDL libraries into a single executable, so the same source code gives a program that runs without any installation on Linux, macOS and Windows, and in a web browser.
+The experiment is written in [Go](https://go.dev) with the [goxpyriment](https://chrplr.github.io/goxpyriment/) library, which relies on SDL3 for display and keyboard input. Go compiles the program, the font and the SDL libraries into a single executable, so the same source code gives a program that runs without any installation on Linux, macOS and Windows, and in a web browser.
 
 To build and run it from the source, install Go (1.25.7 or later), then type:
 
@@ -118,19 +118,7 @@ The main files are:
 - [config.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/config.go): the conditions, characters, angles, repetitions and durations
 - [design.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/design.go): the list of trials and the counterbalancing
 - [stimuli.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/stimuli.go): the drawing of the characters, outlines, arrow and frame
-- [strings.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/strings.go): the texts shown to the participant, in English and French
-- [textinput.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/textinput.go): the answer box of the question asked at the end of the session
-- [sheet.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/sheet.go): a sheet showing all the stimuli, to check them by eye (option `-sheet`)
-- [autopilot.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/autopilot.go): a test mode in which the program presses the keys itself (option `-autopilot`)
-- [keys_notjs.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/keys_notjs.go): the key presses of the test mode in the desktop version
-- [keys_js.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/keys_js.go): the key presses of the test mode in the browser version
-- [design_test.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/design_test.go): the tests of the list of trials and the counterbalancing
-- [stimuli_test.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/stimuli_test.go): the tests of the stimulus geometry
-- [strings_test.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/strings_test.go): the tests of the texts
 - [web/index.html](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/web/index.html): the start page of the browser version
-- [build.sh](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/build.sh): the commands that build the desktop and browser versions
-- [Makefile](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/Makefile): shortcuts for building, testing and checking the data
-- [scripts/check_data.py](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/scripts/check_data.py): the checks of the data files (trial counts, accuracy and measured durations)
 
 
 ## Data files
