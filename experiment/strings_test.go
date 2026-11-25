@@ -19,9 +19,10 @@ func TestEnglishTextsExact(t *testing.T) {
 	cases := map[string][2]string{
 		"welcome": {tx.Welcome(m), `Rotated Characters
 
-In this experiment you will see letters and digits, one at a time, inside a circle. Each character may be tilted, and it may be printed normally or as a mirror image.
+In this experiment you will see letters and digits, one at a time, inside a circle.
+Each character may be printed normally or as a mirror image.
 
-For each character, decide whether it is normal or mirrored, whatever its tilt. Press J if it is normal and F if it is mirrored.
+Press J if it is normal and F if it is mirrored.
 
 Respond as quickly as you can, but try not to make mistakes. The session takes about ten minutes.
 
@@ -67,15 +68,21 @@ This task is adapted from Cooper and Shepard (1973), "The time required to prepa
 Press any key to close the window.`},
 		"end (browser)": {tx.EndBrowser, `The experiment is over. Thank you for taking part.
 
-Your browser has downloaded a file whose name ends in .zip. Please send this file to the person who gave you the link.
-
+Your browser has downloaded a file whose name ends in .zip.
 This task is adapted from Cooper and Shepard (1973), "The time required to prepare for a rotated stimulus", Memory & Cognition, 1(3), 246-250.
 
 Press any key to finish.`},
 	}
 	for name, c := range cases {
-		if c[0] != c[1] {
-			t.Errorf("%s screen differs from the specification:\n--- got\n%s\n--- want\n%s", name, c[0], c[1])
+		if got := plainText(c[0]); got != c[1] {
+			t.Errorf("%s screen differs from the specification:\n--- got\n%s\n--- want\n%s", name, got, c[1])
+		}
+	}
+	// The bold and boxed parts (see richtext.go).
+	w := tx.Welcome(m)
+	for _, part := range []string{boxed("J"), boxed("F"), bold("space bar")} {
+		if !strings.Contains(w, part) {
+			t.Errorf("welcome screen: %q is not marked", plainText(part))
 		}
 	}
 	if tx.Error != "Error" || tx.TooSlow != "Too slow" {
@@ -90,6 +97,9 @@ func allScreens(tx Texts) []string {
 		tx.BlockDone(1), tx.End("path"), tx.EndBrowser, tx.Error, tx.TooSlow, tx.DebriefPrompt, tx.DebriefHint}
 	for _, name := range []string{"N", "B400", "B1000", "C"} {
 		all = append(all, tx.BlockIntro(conditionCatalog[name], 1, 6, m))
+	}
+	for i := range all {
+		all[i] = plainText(all[i])
 	}
 	return all
 }

@@ -33,7 +33,7 @@ func (r *runner) askText(prompt, hint string) (string, error) {
 	defer func() { _ = win.StopTextInput() }()
 
 	w, h := exp.DrawArea()
-	question := stimuli.NewTextBox(prompt, int32(0.9*w), control.Point(0, 0.25*h), exp.ForegroundColor)
+	question := stimuli.NewTextBox(plainText(prompt), int32(0.9*w), control.Point(0, 0.25*h), exp.ForegroundColor)
 	defer question.Unload()
 	hintLine := stimuli.NewTextLine(hint, 0, -0.42*h, exp.ForegroundColor)
 	defer hintLine.Unload()

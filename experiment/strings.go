@@ -66,13 +66,12 @@ func english() Texts {
 	t := Texts{Lang: "en"}
 	t.Welcome = func(m KeyMapping) string {
 		return "Rotated Characters\n\n" +
-			"In this experiment you will see letters and digits, one at a time, inside a circle. " +
-			"Each character may be tilted, and it may be printed normally or as a mirror image.\n\n" +
-			"For each character, decide whether it is normal or mirrored, whatever its tilt. " +
-			"Press " + up(m.NormalKey) + " if it is normal and " + up(m.BackwardKey) + " if it is mirrored.\n\n" +
+			"In this experiment you will see letters and digits, one at a time, inside a circle.\n" +
+			"Each character may be printed normally or as a mirror image.\n\n" +
+			"Press " + boxed(up(m.NormalKey)) + " if it is normal and " + boxed(up(m.BackwardKey)) + " if it is mirrored.\n\n" +
 			"Respond as quickly as you can, but try not to make mistakes. " +
 			"The session takes about ten minutes.\n\n" +
-			"Press the space bar to continue."
+			"Press the " + bold("space bar") + " to continue."
 	}
 	t.BlockTypes = "The experiment is divided into blocks of two kinds.\n\n" +
 		"In some blocks, the circle stays empty for a moment before the character appears.\n\n" +
@@ -123,8 +122,7 @@ func english() Texts {
 			"Press any key to close the window."
 	}
 	t.EndBrowser = "The experiment is over. Thank you for taking part.\n\n" +
-		"Your browser has downloaded a file whose name ends in .zip. " +
-		"Please send this file to the person who gave you the link.\n\n" +
+		"Your browser has downloaded a file whose name ends in .zip.\n" +
 		"This task is adapted from Cooper and Shepard (1973), \"The time required to prepare " +
 		"for a rotated stimulus\", Memory & Cognition, 1(3), 246-250.\n\n" +
 		"Press any key to finish."
@@ -135,13 +133,12 @@ func french() Texts {
 	t := Texts{Lang: "fr"}
 	t.Welcome = func(m KeyMapping) string {
 		return "Caractères tournés\n\n" +
-			"Dans cette expérience, vous verrez des lettres et des chiffres, un à la fois, dans un cercle. " +
-			"Chaque caractère peut être incliné, et il peut être imprimé normalement ou en miroir.\n\n" +
-			"Pour chaque caractère, décidez s'il est normal ou en miroir, quelle que soit son inclinaison. " +
-			"Appuyez sur " + up(m.NormalKey) + " s'il est normal et sur " + up(m.BackwardKey) + " s'il est en miroir.\n\n" +
+			"Dans cette expérience, vous verrez des lettres et des chiffres, un à la fois, dans un cercle.\n" +
+			"Chaque caractère peut être imprimé normalement ou en miroir.\n\n" +
+			"Appuyez sur " + boxed(up(m.NormalKey)) + " s'il est normal et sur " + boxed(up(m.BackwardKey)) + " s'il est en miroir.\n\n" +
 			"Répondez aussi vite que possible, en essayant de ne pas vous tromper. " +
 			"La séance dure environ dix minutes.\n\n" +
-			"Appuyez sur la barre d'espace pour continuer."
+			"Appuyez sur la " + bold("barre d'espace") + " pour continuer."
 	}
 	t.BlockTypes = "L'expérience est divisée en blocs de deux sortes.\n\n" +
 		"Dans certains blocs, le cercle reste vide un moment avant que le caractère apparaisse.\n\n" +
@@ -192,8 +189,7 @@ func french() Texts {
 			"Appuyez sur une touche pour fermer la fenêtre."
 	}
 	t.EndBrowser = "L'expérience est terminée. Merci de votre participation.\n\n" +
-		"Votre navigateur a téléchargé un fichier dont le nom se termine par .zip. " +
-		"Veuillez envoyer ce fichier à la personne qui vous a donné le lien.\n\n" +
+		"Votre navigateur a téléchargé un fichier dont le nom se termine par .zip.\n" +
 		"Cette tâche est adaptée de Cooper et Shepard (1973), « The time required to prepare " +
 		"for a rotated stimulus », Memory & Cognition, 1(3), 246-250.\n\n" +
 		"Appuyez sur une touche pour terminer."

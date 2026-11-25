@@ -103,11 +103,12 @@ Column              | Content
 - [design.go](design.go): the list of trials and the counterbalancing
 - [stimuli.go](stimuli.go): the drawing of the characters, outlines, arrow and frame
 - [strings.go](strings.go): the texts shown to the participant, in English and French
+- [richtext.go](richtext.go): the display of these texts, with bold words and keys drawn in boxes
 - [textinput.go](textinput.go): the answer box of the final question
 - [subject.go](subject.go): the random participant number
 - [sheet.go](sheet.go): the stimulus sheet (option `-sheet`)
 - [autopilot.go](autopilot.go), [keys_notjs.go](keys_notjs.go), [keys_js.go](keys_js.go): the test mode (option `-autopilot`)
-- [design_test.go](design_test.go), [stimuli_test.go](stimuli_test.go), [strings_test.go](strings_test.go), [subject_test.go](subject_test.go): the tests
+- [design_test.go](design_test.go), [stimuli_test.go](stimuli_test.go), [strings_test.go](strings_test.go), [subject_test.go](subject_test.go), [richtext_test.go](richtext_test.go): the tests
 - [assets](assets): the font
 - [build.sh](build.sh) and [Makefile](Makefile): the build commands
 - [scripts/check_data.py](scripts/check_data.py): the checks of the data files

@@ -57,6 +57,7 @@ var (
 	ringColor     = control.RGB(0xc4, 0xc7, 0xd0) // aperture
 	arrowColor    = control.RGB(0x3b, 0x4e, 0xc8)
 	feedbackColor = control.RGB(0xb3, 0x26, 0x1e) // "Error" / "Too slow"
+	keyBoxColor   = control.RGB(0xff, 0xff, 0xff) // inside of a boxed key in the instructions (richtext.go)
 	// Used for the cue only if the outline turns out not to be hollow: a
 	// filled glyph halfway between the background and the character.
 	fallbackCueColor = control.RGB(0x88, 0x89, 0x93)

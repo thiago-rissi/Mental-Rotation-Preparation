@@ -343,27 +343,39 @@ func (r *runner) showEnd() error {
 		// path never splits the file name.
 		text = r.tx.End(filepath.Dir(path) + string(filepath.Separator) + "\n" + filepath.Base(path))
 	}
-	tb := r.exp.FittedTextBox(text)
-	defer tb.Unload()
+	rt, err := newRichText(r.exp, text)
+	if err != nil {
+		return err
+	}
+	defer rt.Unload()
 	if r.auto != nil {
 		r.auto.snapshot(r.exp, "end")
 		r.auto.pressAfter(control.K_SPACE, 300*time.Millisecond)
 	}
-	if err := r.exp.Show(tb); err != nil {
+	if err := r.exp.Show(stimuli.DrawFunc(rt.Draw)); err != nil {
 		return err
 	}
 	r.exp.Keyboard.Clear()
-	_, err := r.exp.Keyboard.Wait()
+	_, err = r.exp.Keyboard.Wait()
 	return err
 }
 
-// waitSpace shows a text screen until SPACE.
+// waitSpace shows a text screen until SPACE. The text may contain bold and
+// boxed parts (see richtext.go).
 func (r *runner) waitSpace(text string) error {
+	rt, err := newRichText(r.exp, text)
+	if err != nil {
+		return err
+	}
+	defer rt.Unload()
 	if r.auto != nil {
 		r.auto.snapshot(r.exp, "text")
 		r.auto.pressAfter(control.K_SPACE, 300*time.Millisecond)
 	}
-	return r.exp.ShowInstructions(text)
+	if err := r.exp.Show(stimuli.DrawFunc(rt.Draw)); err != nil {
+		return err
+	}
+	return r.exp.Keyboard.WaitKey(control.K_SPACE)
 }
 
 // snap takes a screenshot of the next frame in autopilot mode, for the first
