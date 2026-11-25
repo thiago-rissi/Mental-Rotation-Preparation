@@ -5,10 +5,9 @@ package main
 // Every string shown to the participant. English is the reference wording;
 // French is a translation of the same screens.
 //
-// The instructions describe the task and what each block type shows, and say
-// that the advance information is always valid. They deliberately never tell
-// the participant to rotate anything mentally: whether people prepare on their
-// own is part of what the experiment measures.
+// The instructions describe the task and what each block type shows. They
+// deliberately never tell the participant to rotate anything mentally:
+// whether people prepare on their own is part of what the experiment measures.
 
 import (
 	"fmt"
@@ -66,7 +65,7 @@ func english() Texts {
 	t := Texts{Lang: "en"}
 	t.Welcome = func(m KeyMapping) string {
 		return "Rotated Characters\n\n" +
-			"In this experiment you will see letters and digits, one at a time, inside a circle.\n" +
+			"In this experiment you will see letters and digits, one at a time, inside a circle.\n\n" +
 			"Each character may be printed normally or as a mirror image.\n\n" +
 			"Press " + boxed(up(m.NormalKey)) + " if it is normal and " + boxed(up(m.BackwardKey)) + " if it is mirrored.\n\n" +
 			"Respond as quickly as you can, but try not to make mistakes. " +
@@ -77,19 +76,18 @@ func english() Texts {
 		"In some blocks, the circle stays empty for a moment before the character appears.\n\n" +
 		"In the other blocks, you first see the outline of the coming character, upright and " +
 		"in its normal form. An arrow then shows where the top of the character will point, " +
-		"and the character appears as soon as the arrow is gone. The arrow stays on screen " +
-		"longer in some blocks than in others.\n\n" +
-		"The outline and the arrow are always correct, but the character itself may still be mirrored.\n\n" +
-		"Press the space bar to continue."
+		"and the character appears as soon as the arrow is gone.\n\n" +
+		// "The outline and the arrow are always correct, but the character itself may still be mirrored.\n\n" +
+		"Press the " + bold("space bar") + " to continue."
 	t.Practice = func(n int) string {
 		return "You will begin with " + spelled(n, enNumbers) + " practice trials. " +
 			"Place your left index finger on F and your right index finger on J.\n\n" +
-			"Press the space bar when you are ready."
+			"Press the " + bold("space bar") + " when you are ready."
 	}
 	t.AfterPractice = func(nBlocks, nTrials int) string {
 		return "The practice is over. The experiment itself has " + spelled(nBlocks, enNumbers) +
 			" blocks of " + strconv.Itoa(nTrials) + " trials, and you can rest between blocks.\n\n" +
-			"Press the space bar to begin."
+			"Press the " + bold("space bar") + " to begin."
 	}
 	t.BlockIntro = func(d ConditionDef, i, n int, m KeyMapping) string {
 		var what string
@@ -104,7 +102,7 @@ func english() Texts {
 		}
 		return fmt.Sprintf("Block %d of %d\n\n", i, n) + what + "\n\n" +
 			"Press " + up(m.NormalKey) + " for normal and " + up(m.BackwardKey) + " for mirrored.\n\n" +
-			"Press the space bar to begin."
+			"Press the " + bold("space bar") + " to begin."
 	}
 	t.BlockDone = func(i int) string {
 		return fmt.Sprintf("End of block %d. You may rest for a moment before continuing.", i)
@@ -122,7 +120,6 @@ func english() Texts {
 			"Press any key to close the window."
 	}
 	t.EndBrowser = "The experiment is over. Thank you for taking part.\n\n" +
-		"Your browser has downloaded a file whose name ends in .zip.\n" +
 		"This task is adapted from Cooper and Shepard (1973), \"The time required to prepare " +
 		"for a rotated stimulus\", Memory & Cognition, 1(3), 246-250.\n\n" +
 		"Press any key to finish."
@@ -133,7 +130,7 @@ func french() Texts {
 	t := Texts{Lang: "fr"}
 	t.Welcome = func(m KeyMapping) string {
 		return "Caractères tournés\n\n" +
-			"Dans cette expérience, vous verrez des lettres et des chiffres, un à la fois, dans un cercle.\n" +
+			"Dans cette expérience, vous verrez des lettres et des chiffres, un à la fois, dans un cercle.\n\n" +
 			"Chaque caractère peut être imprimé normalement ou en miroir.\n\n" +
 			"Appuyez sur " + boxed(up(m.NormalKey)) + " s'il est normal et sur " + boxed(up(m.BackwardKey)) + " s'il est en miroir.\n\n" +
 			"Répondez aussi vite que possible, en essayant de ne pas vous tromper. " +
@@ -144,19 +141,18 @@ func french() Texts {
 		"Dans certains blocs, le cercle reste vide un moment avant que le caractère apparaisse.\n\n" +
 		"Dans les autres blocs, vous voyez d'abord le contour du caractère à venir, droit et " +
 		"sous sa forme normale. Une flèche montre ensuite où pointera le haut du caractère, " +
-		"et le caractère apparaît dès que la flèche a disparu. La flèche reste à l'écran " +
-		"plus longtemps dans certains blocs que dans d'autres.\n\n" +
-		"Le contour et la flèche sont toujours exacts, mais le caractère lui-même peut être en miroir.\n\n" +
-		"Appuyez sur la barre d'espace pour continuer."
+		"et le caractère apparaît dès que la flèche a disparu.\n\n" +
+		// "Le contour et la flèche sont toujours exacts, mais le caractère lui-même peut être en miroir.\n\n" +
+		"Appuyez sur la " + bold("barre d'espace") + " pour continuer."
 	t.Practice = func(n int) string {
 		return "Vous allez commencer par " + spelled(n, frNumbers) + " essais d'entraînement. " +
 			"Placez votre index gauche sur F et votre index droit sur J.\n\n" +
-			"Appuyez sur la barre d'espace quand vous êtes prêt."
+			"Appuyez sur la " + bold("barre d'espace") + " quand vous êtes prêt."
 	}
 	t.AfterPractice = func(nBlocks, nTrials int) string {
 		return "L'entraînement est terminé. L'expérience proprement dite comporte " + spelled(nBlocks, frNumbers) +
 			" blocs de " + strconv.Itoa(nTrials) + " essais, et vous pourrez vous reposer entre les blocs.\n\n" +
-			"Appuyez sur la barre d'espace pour commencer."
+			"Appuyez sur la " + bold("barre d'espace") + " pour commencer."
 	}
 	t.BlockIntro = func(d ConditionDef, i, n int, m KeyMapping) string {
 		var what string
@@ -171,7 +167,7 @@ func french() Texts {
 		}
 		return fmt.Sprintf("Bloc %d sur %d\n\n", i, n) + what + "\n\n" +
 			"Appuyez sur " + up(m.NormalKey) + " pour normal et sur " + up(m.BackwardKey) + " pour miroir.\n\n" +
-			"Appuyez sur la barre d'espace pour commencer."
+			"Appuyez sur la " + bold("barre d'espace") + " pour commencer."
 	}
 	t.BlockDone = func(i int) string {
 		return fmt.Sprintf("Fin du bloc %d. Vous pouvez vous reposer un moment avant de continuer.", i)
@@ -189,7 +185,6 @@ func french() Texts {
 			"Appuyez sur une touche pour fermer la fenêtre."
 	}
 	t.EndBrowser = "L'expérience est terminée. Merci de votre participation.\n\n" +
-		"Votre navigateur a téléchargé un fichier dont le nom se termine par .zip.\n" +
 		"Cette tâche est adaptée de Cooper et Shepard (1973), « The time required to prepare " +
 		"for a rotated stimulus », Memory & Cognition, 1(3), 246-250.\n\n" +
 		"Appuyez sur une touche pour terminer."

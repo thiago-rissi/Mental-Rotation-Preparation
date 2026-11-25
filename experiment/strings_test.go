@@ -20,6 +20,7 @@ func TestEnglishTextsExact(t *testing.T) {
 		"welcome": {tx.Welcome(m), `Rotated Characters
 
 In this experiment you will see letters and digits, one at a time, inside a circle.
+
 Each character may be printed normally or as a mirror image.
 
 Press J if it is normal and F if it is mirrored.
@@ -31,9 +32,7 @@ Press the space bar to continue.`},
 
 In some blocks, the circle stays empty for a moment before the character appears.
 
-In the other blocks, you first see the outline of the coming character, upright and in its normal form. An arrow then shows where the top of the character will point, and the character appears as soon as the arrow is gone. The arrow stays on screen longer in some blocks than in others.
-
-The outline and the arrow are always correct, but the character itself may still be mirrored.
+In the other blocks, you first see the outline of the coming character, upright and in its normal form. An arrow then shows where the top of the character will point, and the character appears as soon as the arrow is gone.
 
 Press the space bar to continue.`},
 		"practice": {tx.Practice(6), `You will begin with six practice trials. Place your left index finger on F and your right index finger on J.
@@ -68,7 +67,6 @@ This task is adapted from Cooper and Shepard (1973), "The time required to prepa
 Press any key to close the window.`},
 		"end (browser)": {tx.EndBrowser, `The experiment is over. Thank you for taking part.
 
-Your browser has downloaded a file whose name ends in .zip.
 This task is adapted from Cooper and Shepard (1973), "The time required to prepare for a rotated stimulus", Memory & Cognition, 1(3), 246-250.
 
 Press any key to finish.`},
