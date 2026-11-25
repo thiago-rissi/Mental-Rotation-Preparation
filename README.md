@@ -77,55 +77,19 @@ To keep the session short enough for volunteers, we changed several aspects of t
 
 ## Running the experiment
 
-There are three ways to run the experiment.
+The simplest way is to open <https://thiago-rissi.github.io/Mental-Rotation-Preparation/experiment/> in Chrome, Edge or Firefox, on a computer with a keyboard, enter a participant number and click Start. When the experiment is over, the browser downloads a `.zip` file containing the results.
 
-### In the browser
-
-Open <https://thiago-rissi.github.io/Mental-Rotation-Preparation/experiment/>, enter your participant number and click Start. You need a computer with a keyboard and Chrome, Edge or Firefox. Keep the tab in front until the end. When the experiment is over, the browser downloads a `.zip` file containing the results.
-
-### With a prebuilt program
-
-Download the file for your system from the [Releases page](https://github.com/thiago-rissi/Mental-Rotation-Preparation/releases) and run it. Nothing else needs to be installed. On Linux and macOS, first make the file executable with `chmod +x`. The program asks for the participant number when it starts. The number can also be given on the command line:
-
-    ./mental-rotation-preparation-linux -s 3
-
-On macOS, the first launch is blocked because the program is not signed. Right-click the file and choose Open, or run:
-
-    xattr -d com.apple.quarantine mental-rotation-preparation-macos-arm64
-
-On Windows, click "More info", then "Run anyway" in the SmartScreen window.
-
-### From the source code
-
-See the next section.
+The experiment also runs as a program on Windows, macOS and Linux, either downloaded ready to use from the [Releases page](https://github.com/thiago-rissi/Mental-Rotation-Preparation/releases) or built from the source code. The [README of the experiment](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/experiment/README.md) explains how to install and run it in each case.
 
 
 ## Source code
 
-The experiment is written in [Go](https://go.dev) with the [goxpyriment](https://chrplr.github.io/goxpyriment/) library, which relies on SDL3 for display and keyboard input. Go compiles the program, the font and the SDL libraries into a single executable, so the same source code gives a program that runs without any installation on Linux, macOS and Windows, and in a web browser.
-
-To build and run it from the source, install Go (1.25.7 or later), then type:
-
-    git clone https://github.com/thiago-rissi/Mental-Rotation-Preparation
-    cd Mental-Rotation-Preparation
-    go run . -s 1
-
-The option `-w` opens the experiment in a window instead of full screen. The executables of the Releases page are built for each tagged version by [release.yml](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/.github/workflows/release.yml), and the browser version is built and published by [pages.yml](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/.github/workflows/pages.yml).
-
-The main files are:
-
-- [main.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/main.go): the procedure (instructions, blocks, trials and data logging)
-- [config.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/config.go): the conditions, characters, angles, repetitions and durations
-- [design.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/design.go): the list of trials and the counterbalancing
-- [stimuli.go](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/stimuli.go): the drawing of the characters, outlines, arrow and frame
-- [web/index.html](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/web/index.html): the start page of the browser version
+The experiment is written in [Go](https://go.dev) with the [goxpyriment](https://chrplr.github.io/goxpyriment/) library. It needs no installation and runs on Windows, macOS and Linux, and in a web browser. The source code is in the folder [experiment](https://github.com/thiago-rissi/Mental-Rotation-Preparation/tree/main/experiment), whose README describes each file.
 
 
 ## Data files
 
-Each session produces a CSV file named `Mental-Rotation-Preparation_sub-<number>_date-<date>.csv`, with one line per trial, and a text file describing the computer and the screen. The desktop version saves both files in the folder `data` of the directory from which the program is started, or in the folder named by the environment variable `GOXPY_DATA` if it is set. It also saves a third file with the participant's answer to the open question asked at the end of the session. The browser version downloads the CSV file and the text file together in a `.zip` file. The files of all participants are stored in the folder [data](https://github.com/thiago-rissi/Mental-Rotation-Preparation/tree/main/data).
-
-The main columns of the CSV file are `condition` (N, B400 or B1000), `character`, `version` (normal or backward), `orientation_deg` (the orientation on the screen, in degrees clockwise from upright), `angular_departure` (0, 60, 120 or 180), `response` (normal, backward or none), `correct` (1 or 0), `rt_ms` (the response time in milliseconds) and `arrow_ms_measured` (the time from the onset of the arrow to the onset of the character, in milliseconds, empty in condition N). Practice trials have `practice` set to 1, and trials without a response have `timeout` set to 1.
+Each session produces a CSV file named `Mental-Rotation-Preparation_sub-<number>_date-<date>.csv`, with one line per trial, and a text file describing the computer and the screen. The files of all participants are stored in the folder [experiment/data](https://github.com/thiago-rissi/Mental-Rotation-Preparation/tree/main/experiment/data). The columns of the CSV file are described in the [README of the experiment](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/experiment/README.md#data-files).
 
 
 ## Results

@@ -1,12 +1,14 @@
 # Deploys the GitHub Pages site:
 #
-#   /              the report: README.md built by Jekyll with the Cayman theme
-#                  (see _config.yml)
-#   /experiment/   the browser build of Mental-Rotation-Preparation
+#   /              the report: report/README.md built by Jekyll with the
+#                  Cayman theme (see report/_config.yml)
+#   /experiment/   the browser version of the experiment: the program in
+#                  experiment/ compiled to WebAssembly, started from the page
+#                  webapp/index.html
 #
 # The browser bundle is made by the wasmsdl bundler of the go-sdl3 fork pinned
-# in go.mod (the same replace line every build uses), so what is deployed is
-# exactly what `./build.sh web` builds locally.
+# in experiment/go.mod (the same replace line every build uses), so what is
+# deployed is exactly what `experiment/build.sh web` builds locally.
 #
 # Desktop binaries are built by the separate release.yml.
 #
@@ -36,24 +38,26 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version-file: experiment/go.mod
+          cache-dependency-path: experiment/go.sum
 
       - name: Check the browser build compiles and the tests pass
+        working-directory: experiment
         run: |
           go test ./...
           GOOS=js GOARCH=wasm go vet ./...
 
-      # Built outside the workspace, so that Jekyll does not pick it up as a
-      # source folder.
+      # Built outside the workspace, so that it never mixes with the Jekyll
+      # output until it is copied in below.
       - name: Build the browser version of the experiment
-        run: ./build.sh web "$RUNNER_TEMP/experiment"
+        run: experiment/build.sh web "$RUNNER_TEMP/experiment"
 
       - uses: actions/configure-pages@v5
 
-      - name: Build the report with Jekyll (README.md, theme from _config.yml)
+      - name: Build the report with Jekyll (report/README.md, theme from report/_config.yml)
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./
+          source: ./report
           destination: ./_site
 
       # jekyll-build-pages runs in a container as root, so _site belongs to root.

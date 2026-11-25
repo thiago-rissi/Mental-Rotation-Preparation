@@ -38,4 +38,4 @@ dist:
 	./build.sh dist
 
 clean:
-	rm -rf dist _site mental-rotation-preparation mental-rotation-preparation.exe
+	rm -rf dist dist-web mental-rotation-preparation mental-rotation-preparation.exe

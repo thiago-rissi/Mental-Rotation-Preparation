@@ -12,9 +12,6 @@
 # go-sdl3 embeds the SDL libraries for every platform and needs no cgo, so all
 # targets cross-compile from one Linux runner. The browser build is deployed by
 # the separate pages.yml.
-#
-# NOTE: GitHub only runs workflows found in .github/workflows at the ROOT of a
-# repository. This file takes effect once this folder is its own repository.
 name: release
 
 on:
@@ -34,25 +31,27 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version-file: experiment/go.mod
+          cache-dependency-path: experiment/go.sum
 
       - name: Vet and test
+        working-directory: experiment
         run: |
           go vet ./...
           go test ./...
 
       - name: Cross-compile
-        run: ./build.sh dist
+        run: experiment/build.sh dist
 
       - uses: actions/upload-artifact@v4
         with:
           name: binaries
-          path: dist/*
+          path: experiment/dist/*
 
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/mental-rotation-preparation-*
-            dist/SHA256SUMS
+            experiment/dist/mental-rotation-preparation-*
+            experiment/dist/SHA256SUMS

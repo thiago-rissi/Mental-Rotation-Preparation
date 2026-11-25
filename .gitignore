@@ -1,17 +1,18 @@
-# binaries (go build . names it after the module: mental-rotation-preparation)
-/mental-rotation-preparation
-/mental-rotation-preparation.exe
-/dist/
+# Build output of the experiment (go build . names it after the module)
+/experiment/mental-rotation-preparation
+/experiment/mental-rotation-preparation.exe
+/experiment/dist/
+/experiment/dist-web/
 
-# Jekyll and browser-bundle build output
+# Pages build output
 /_site/
 
 # Participant data are committed. Screenshots and the early test runs made
 # under the program's old name are not.
-/data/*.png
-/data/Preparation-Rotation_*
-
-__pycache__/
+/experiment/data/*.png
+/experiment/data/Preparation-Rotation_*
 
 # The Cooper & Shepard (1973) article is copyrighted: kept locally only
 /paper/
+
+__pycache__/

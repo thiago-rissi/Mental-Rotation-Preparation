@@ -10,13 +10,15 @@
 #                       mental-rotation-preparation-macos-arm64  (Apple silicon)
 #                       mental-rotation-preparation-macos-amd64  (Intel Mac)
 #                       mental-rotation-preparation-windows.exe  (Windows x86-64)
-#   ./build.sh web      browser bundle in _site/experiment/ (see web/index.html)
+#   ./build.sh web      browser bundle in dist-web/, from the launch page
+#                       ../webapp/index.html
 #   ./build.sh web DIR  browser bundle in DIR instead
 #   ./build.sh serve    browser bundle served on http://localhost:8080/
 #
 # Everything is embedded (SDL3, SDL3_ttf, the font): no C compiler, no SDL
 # installation. Works on Linux, macOS and Windows (Git Bash).
 set -euo pipefail
+caller=$PWD
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 # This folder may sit inside a goxpyriment checkout whose go.work does not
@@ -25,6 +27,7 @@ export GOWORK=off
 export CGO_ENABLED=0
 
 NAME=mental-rotation-preparation
+WEBAPP=../webapp/index.html
 LDFLAGS="-s -w"
 # The browser bundler ships inside the go-sdl3 fork pinned by the replace line
 # in go.mod, so `go run` uses exactly that version.
@@ -47,14 +50,18 @@ dist)
     ls -l dist
     ;;
 web)
-    out=${2:-_site/experiment}
+    out=${2:-dist-web}
+    # A DIR given on the command line is relative to where build.sh was called.
+    if [ -n "${2:-}" ]; then
+        case $out in /* | [A-Za-z]:*) ;; *) out=$caller/$out ;; esac
+    fi
     rm -rf "$out"
-    $WASMSDL build -html web/index.html -out "$out" .
+    $WASMSDL build -html "$WEBAPP" -out "$out" .
     ls -l "$out"
     ;;
 serve)
     # Sends the COOP/COEP headers that give the page the ~5 us clock.
-    $WASMSDL serve -html "$PWD/web/index.html" .
+    $WASMSDL serve -html "$(cd ../webapp && pwd)/index.html" .
     ;;
 *)
     echo "usage: $0 [dist|web [DIR]|serve]" >&2
