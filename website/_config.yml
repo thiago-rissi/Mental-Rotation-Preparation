@@ -1,1 +1,7 @@
 theme: jekyll-theme-cayman
+
+# The home page, index.md, is the README at the root of the repository, copied
+# here by .github/workflows/pages.yml. This folder's own README only describes
+# the folder.
+exclude:
+  - README.md

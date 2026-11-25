@@ -314,10 +314,14 @@ type KeyMapping struct {
 	NormalKey, BackwardKey string
 }
 
-// MappingFor counterbalances the response keys by subject: odd IDs press J for
-// normal and F for backward (as in the paper), even IDs the reverse.
+// MappingFor counterbalances the response keys by subject, independently of
+// the condition order. The order is row (subject-1) mod 6 of the Latin square
+// (ConditionOrder); the keys alternate every 6 subjects: subjects 1-6 press J
+// for normal and F for backward (as in the paper), 7-12 the reverse, and so
+// on. Subjects 1-12 thus cover each order with each mapping exactly once, and
+// for a random subject number the two are independent.
 func MappingFor(subject int) KeyMapping {
-	if subject%2 != 0 {
+	if ((subject-1)/6)%2 == 0 {
 		return KeyMapping{NormalKey: "j", BackwardKey: "f"}
 	}
 	return KeyMapping{NormalKey: "f", BackwardKey: "j"}

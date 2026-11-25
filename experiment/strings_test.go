@@ -48,7 +48,7 @@ In this block, the circle stays empty for a moment before the character appears.
 Press J for normal and F for mirrored.
 
 Press the space bar to begin.`},
-		"block B after a break": {tx.BlockDone(2) + "\n\n" + tx.BlockIntro(conditionCatalog["B400"], 3, 6, MappingFor(2)), `End of block 2. You may rest for a moment before continuing.
+		"block B after a break": {tx.BlockDone(2) + "\n\n" + tx.BlockIntro(conditionCatalog["B400"], 3, 6, KeyMapping{NormalKey: "f", BackwardKey: "j"}), `End of block 2. You may rest for a moment before continuing.
 
 Block 3 of 6
 

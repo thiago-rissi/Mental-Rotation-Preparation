@@ -15,10 +15,11 @@
 //
 // Usage:
 //
-//	mental-rotation-preparation -s 7               run participant 7 (fullscreen, English)
-//	mental-rotation-preparation -s 7 -w -lang fr   windowed, French
+//	mental-rotation-preparation                    a participant (random number, fullscreen, English)
+//	mental-rotation-preparation -s 7               participant number 7 instead of a random one
+//	mental-rotation-preparation -w -lang fr        windowed, French
 //	mental-rotation-preparation -s 1 -w -quick     3 short blocks, for debugging
-//	mental-rotation-preparation -s 0 -w -sheet     stimulus check sheet (arrows change orientation)
+//	mental-rotation-preparation -w -sheet          stimulus check sheet (arrows change orientation)
 //
 // In the browser the same flags are URL parameters: ?s=7, ?s=1&quick.
 //
@@ -76,8 +77,20 @@ func main() {
 		}
 	}
 
+	// No -s: draw the participant number at random instead of letting
+	// goxpyriment open its setup dialog (see subject.go). In the browser the
+	// flags come from the page address, where webapp/index.html has already put
+	// a random number.
+	randomID := false
+	if runtime.GOOS != "js" {
+		os.Args, randomID = withSubject(os.Args, randomSubject())
+	}
+
 	exp := control.NewExperimentFromFlags(expName, bgColor, fgColor, 28)
 	defer exp.End()
+	if randomID {
+		exp.AddExperimentInfo("subject id: drawn at random by the program (no -s given)")
+	}
 
 	tx, err := TextsFor(*lang)
 	if err != nil {
@@ -102,8 +115,8 @@ func main() {
 
 	subject, ok := exp.Subject.Number()
 	if !ok || subject < 1 {
-		exp.Fatal("the subject ID must be a positive integer (e.g. -s 7), got %q: "+
-			"it selects the condition order and the response keys", exp.Subject.String())
+		exp.Fatal("the subject ID must be a positive integer (e.g. -s 7), or left out to draw one at random; "+
+			"got %q: it selects the condition order and the response keys", exp.Subject.String())
 	}
 	session, err := BuildSession(cfg, subject, *quick)
 	if err != nil {

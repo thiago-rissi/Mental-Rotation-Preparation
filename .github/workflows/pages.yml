@@ -1,7 +1,8 @@
 # Deploys the GitHub Pages site:
 #
-#   /              the report: report/README.md built by Jekyll with the
-#                  Cayman theme (see report/_config.yml)
+#   /              the report: the README at the root of the repository,
+#                  built by Jekyll from website/ with the Cayman theme (see
+#                  website/_config.yml and website/assets/css/style.scss)
 #   /experiment/   the browser version of the experiment: the program in
 #                  experiment/ compiled to WebAssembly, started from the page
 #                  webapp/index.html
@@ -54,10 +55,15 @@ jobs:
 
       - uses: actions/configure-pages@v5
 
-      - name: Build the report with Jekyll (report/README.md, theme from report/_config.yml)
+      # The report is the README at the root of the repository. Its links to
+      # website/ become links from the root of the site.
+      - name: Use the README as the home page of the site
+        run: sed 's#](website/#](#g' README.md > website/index.md
+
+      - name: Build the report with Jekyll (theme and colours from website/)
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./report
+          source: ./website
           destination: ./_site
 
       # jekyll-build-pages runs in a container as root, so _site belongs to root.

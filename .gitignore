@@ -4,8 +4,9 @@
 /experiment/dist/
 /experiment/dist-web/
 
-# Pages build output
+# Pages build output, and the home page that pages.yml copies from README.md
 /_site/
+/website/index.md
 
 # Participant data are committed. Screenshots and the early test runs made
 # under the program's old name are not.

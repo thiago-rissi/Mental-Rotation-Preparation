@@ -45,7 +45,7 @@ B-1000    | the outline of the character for 2000 ms, then the arrow for 1000 ms
 
 Each condition is crossed with the angular departure of the character from upright (0, 60, 120 or 180 degrees) and with its version (normal or mirror image). For 60 and 120 degrees, half of the characters are turned clockwise and half counterclockwise. Each of the 24 combinations is repeated six times, which gives 144 trials per participant, in six blocks of 24 trials.
 
-The three conditions are presented in one order for the first three blocks and in the reverse order for the last three. This order is one of the six possible orders, chosen from the participant number, so that ten participants cover the six orders almost equally. The response keys are also counterbalanced. Participants with an odd number press J for normal and F for mirror image, and participants with an even number do the reverse.
+The three conditions are presented in one order for the first three blocks and in the reverse order for the last three. Participants do not enter a number. The program draws one at random when it starts, and this number sets, independently, the order, one of the six possible orders, and the response keys: J for normal and F for mirror image, or the reverse. Every order and key mapping is equally likely, but with few participants the groups may not be exactly balanced.
 
 Each participant first completes six practice trials. The session lasts about ten minutes.
 
@@ -58,7 +58,7 @@ The characters are G, J, R, 2, 5 and 7, as in the original study. They are drawn
 
 After the character appears, the participant has 3000 ms to respond. A wrong answer is followed by the word "Error" for 400 ms, and a missing answer by "Too slow". The next trial starts 500 ms later.
 
-![Successive screens of a trial in each condition](figures/trial-sequences.png)
+![Successive screens of a trial in each condition](website/figures/trial-sequences.png)
 
 All durations are counted in screen refreshes. When the program starts, it gets the refresh rate of the screen from the system, or measures it in the browser, and converts every duration into a number of frames. Response times are computed from the time stamp of the screen refresh that displayed the character and the time stamp of the key press, both given by the system rather than measured by the program.
 
@@ -71,20 +71,20 @@ To keep the session short enough for volunteers, we changed several aspects of t
 - we used four angular departures instead of six orientations, and presented 60 and 120 degrees in both directions, since the original results were symmetric around 180 degrees;
 - the blank field of condition N lasts 1000 ms instead of 2000 ms;
 - trials with errors are not repeated, and are excluded from the analysis of response times;
-- the response keys are counterbalanced across participants;
+- the response keys are assigned at random to each participant;
 - the size of the stimuli is relative to the screen, because the viewing distance is not controlled.
 
 
 ## Running the experiment
 
-The simplest way is to open <https://thiago-rissi.github.io/Mental-Rotation-Preparation/experiment/> in Chrome, Edge or Firefox, on a computer with a keyboard, enter a participant number and click Start. When the experiment is over, the browser downloads a `.zip` file containing the results.
+The simplest way is to open <https://thiago-rissi.github.io/Mental-Rotation-Preparation/experiment/> in Chrome, Edge or Firefox, on a computer with a keyboard, and click Start. When the experiment is over, the browser downloads a `.zip` file containing the results.
 
 The experiment also runs as a program on Windows, macOS and Linux, either downloaded ready to use from the [Releases page](https://github.com/thiago-rissi/Mental-Rotation-Preparation/releases) or built from the source code. The [README of the experiment](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/experiment/README.md) explains how to install and run it in each case.
 
 
 ## Source code
 
-The experiment is written in [Go](https://go.dev) with the [goxpyriment](https://chrplr.github.io/goxpyriment/) library. It needs no installation and runs on Windows, macOS and Linux, and in a web browser. The source code is in the folder [experiment](https://github.com/thiago-rissi/Mental-Rotation-Preparation/tree/main/experiment), whose README describes each file.
+The experiment is written in [Go](https://go.dev) with the [goxpyriment](https://chrplr.github.io/goxpyriment/) library. It needs no installation and runs on Windows, macOS and Linux, and in a web browser. The source code is in the folder [experiment](https://github.com/thiago-rissi/Mental-Rotation-Preparation/tree/main/experiment), whose README describes each file. The files of this site are in [website](https://github.com/thiago-rissi/Mental-Rotation-Preparation/tree/main/website), and the start page of the browser version in [webapp](https://github.com/thiago-rissi/Mental-Rotation-Preparation/tree/main/webapp).
 
 
 ## Data files

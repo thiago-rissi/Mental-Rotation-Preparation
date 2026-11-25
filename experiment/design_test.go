@@ -246,20 +246,36 @@ func TestBlockOrder(t *testing.T) {
 }
 
 func TestKeyMapping(t *testing.T) {
+	cfg := DefaultConfig()
+	seen := map[string]int{} // "order|mapping" -> subject
 	for subject := 1; subject <= 12; subject++ {
 		m := MappingFor(subject)
-		if subject%2 == 1 {
+		if subject <= 6 {
 			if m.NormalKey != "j" || m.BackwardKey != "f" || m.String() != "J=normal;F=backward" {
-				t.Errorf("subject %d (odd): mapping %+v", subject, m)
+				t.Errorf("subject %d (1-6): mapping %+v", subject, m)
 			}
 		} else {
 			if m.NormalKey != "f" || m.BackwardKey != "j" || m.String() != "F=normal;J=backward" {
-				t.Errorf("subject %d (even): mapping %+v", subject, m)
+				t.Errorf("subject %d (7-12): mapping %+v", subject, m)
 			}
 		}
 		if m.Response(m.NormalKey) != Normal || m.Response(m.BackwardKey) != Backward || m.Response("") != "none" {
 			t.Errorf("subject %d: Response broken", subject)
 		}
+		// The keys must not depend on the condition order: subjects 1-12 give
+		// each of the 6 orders with each of the 2 mappings exactly once.
+		order, err := ConditionOrder(cfg.Conditions, subject)
+		if err != nil {
+			t.Fatal(err)
+		}
+		key := strings.Join(order, ",") + "|" + m.String()
+		if prev, ok := seen[key]; ok {
+			t.Errorf("subjects %d and %d share order and mapping %s", prev, subject, key)
+		}
+		seen[key] = subject
+	}
+	if len(seen) != 12 {
+		t.Errorf("subjects 1-12 give %d order x mapping combinations, want 12", len(seen))
 	}
 }
 

@@ -13,11 +13,11 @@ This folder holds the program of the experiment described in the [report](https:
 
 ## Running the experiment
 
-Each participant needs their own number, from 1 upwards. It sets the order of the conditions and the response keys.
+Participants do not need a number. Each session draws a random six-digit number, which sets the order of the conditions and the response keys, and appears in the names of the data files.
 
 ### In a web browser
 
-Open <https://thiago-rissi.github.io/Mental-Rotation-Preparation/experiment/> in Chrome, Edge or Firefox, on a computer with a keyboard. Enter the participant number and click Start. Keep the tab in front until the end screen. The results are then downloaded as a `.zip` file.
+Open <https://thiago-rissi.github.io/Mental-Rotation-Preparation/experiment/> in Chrome, Edge or Firefox, on a computer with a keyboard, and click Start. Keep the tab in front until the end screen. The results are then downloaded as a `.zip` file.
 
 ### With a prebuilt program
 
@@ -45,7 +45,7 @@ On Linux, type:
     chmod +x mental-rotation-preparation-linux
     ./mental-rotation-preparation-linux
 
-The program asks for the participant number, then runs in full screen. The last screen shows where the data were saved.
+The program starts at once, in full screen. The last screen shows where the data were saved.
 
 ### From the source code
 
@@ -62,7 +62,7 @@ Install Go 1.25.7 or later from <https://go.dev/dl/>. Nothing else is needed. Th
 
 Option       | Effect
 ------------ | ------
-`-s N`       | participant number N
+`-s N`       | use participant number N instead of a random one
 `-w`         | run in a window instead of full screen
 `-lang fr`   | instructions in French
 `-quick`     | three short blocks, to try the program
@@ -104,9 +104,10 @@ Column              | Content
 - [stimuli.go](stimuli.go): the drawing of the characters, outlines, arrow and frame
 - [strings.go](strings.go): the texts shown to the participant, in English and French
 - [textinput.go](textinput.go): the answer box of the final question
+- [subject.go](subject.go): the random participant number
 - [sheet.go](sheet.go): the stimulus sheet (option `-sheet`)
 - [autopilot.go](autopilot.go), [keys_notjs.go](keys_notjs.go), [keys_js.go](keys_js.go): the test mode (option `-autopilot`)
-- [design_test.go](design_test.go), [stimuli_test.go](stimuli_test.go), [strings_test.go](strings_test.go): the tests
+- [design_test.go](design_test.go), [stimuli_test.go](stimuli_test.go), [strings_test.go](strings_test.go), [subject_test.go](subject_test.go): the tests
 - [assets](assets): the font
 - [build.sh](build.sh) and [Makefile](Makefile): the build commands
 - [scripts/check_data.py](scripts/check_data.py): the checks of the data files
