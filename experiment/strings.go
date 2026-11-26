@@ -65,27 +65,27 @@ func english() Texts {
 	t := Texts{Lang: "en"}
 	t.Welcome = func(m KeyMapping) string {
 		return "Rotated Characters\n\n" +
-			"In this experiment you will see letters and digits, one at a time, inside a circle.\n\n" +
+			"In this experiment you will see letters and digits, one at a time, inside a circle.\n" +
 			"Each character may be printed normally or as a mirror image.\n\n" +
-			"Press " + boxed(up(m.NormalKey)) + " if it is normal and " + boxed(up(m.BackwardKey)) + " if it is mirrored.\n\n" +
-			"Respond as quickly as you can, but try not to make mistakes. " +
+			"Press " + boxed(up(m.NormalKey)) + " if it is normal and " + boxed(up(m.BackwardKey)) + " if it is mirrored.\n" +
+			"Respond as quickly as you can, but try not to make mistakes.\n\n" +
 			"The session takes about ten minutes.\n\n" +
 			"Press the " + bold("space bar") + " to continue."
 	}
 	t.BlockTypes = "The experiment is divided into blocks of two kinds.\n\n" +
 		"In some blocks, the circle stays empty for a moment before the character appears.\n\n" +
-		"In the other blocks, you first see the outline of the coming character. " +
+		"In the other blocks, you first see the outline of the coming character.\n" +
 		"An arrow then shows where the top of the character will point, " +
 		"and the character appears as soon as the arrow is gone.\n\n" +
 		// "The outline and the arrow are always correct, but the character itself may still be mirrored.\n\n" +
 		"Press the " + bold("space bar") + " to continue."
 	t.Practice = func(n int) string {
-		return "You will begin with " + spelled(n, enNumbers) + " practice trials.\n\n" +
+		return "You will begin with " + spelled(n, enNumbers) + " practice trials.\n" +
 			"Place your " + bold("left") + " index finger on " + boxed("F") + " and your " + bold("right") + " index finger on " + boxed("J") + ".\n\n" +
 			"Press the " + bold("space bar") + " when you are ready."
 	}
 	t.AfterPractice = func(nBlocks, nTrials int) string {
-		return "The practice is over.\n\nThe experiment itself has " + spelled(nBlocks, enNumbers) +
+		return "The practice is over.\nThe experiment itself has " + spelled(nBlocks, enNumbers) +
 			" blocks of " + strconv.Itoa(nTrials) + " trials, and you can rest between blocks.\n\n" +
 			"Press the " + bold("space bar") + " to begin."
 	}
@@ -95,31 +95,31 @@ func english() Texts {
 		case KindN:
 			what = "In this block, the circle stays empty for a moment before the character appears."
 		case KindB:
-			what = "In this block, you will see outline -> arrow -> character."
+			what = "In this block, you will see\n" + boxed("outline") + " -> " + boxed("arrow") + " -> " + boxed("character") + "."
 		case KindC: // not in the default design; no wording was specified for it
 			what = "In this block, you will see the outline of the character already tilted, " +
 				"then an empty circle, then the character."
 		}
 		return fmt.Sprintf("Block %d of %d\n\n", i, n) + what + "\n\n" +
-			"Press " + up(m.NormalKey) + " for normal and " + up(m.BackwardKey) + " for mirrored.\n\n" +
+			"Press " + boxed(up(m.NormalKey)) + " for normal and " + boxed(up(m.BackwardKey)) + " for mirrored.\n\n" +
 			"Press the " + bold("space bar") + " to begin."
 	}
 	t.BlockDone = func(i int) string {
-		return fmt.Sprintf("End of block %d.\n\nYou may rest for a moment before continuing.", i)
+		return fmt.Sprintf("End of block %d.\nYou may rest for a moment before continuing.", i)
 	}
 	t.Error = "Error"
 	t.TooSlow = "Too slow"
-	t.DebriefPrompt = "Before the character appeared, did you try to prepare for it? If so, how?"
-	t.DebriefHint = "Type your answer and press Enter to continue."
+	t.DebriefPrompt = "Before the character appeared, did you try to prepare for it?\nIf so, how?"
+	t.DebriefHint = "Type your answer and press " + bold("Enter") + " to continue."
 	t.End = func(path string) string {
-		return "The experiment is over. Thank you for taking part.\n\n" +
+		return "The experiment is over.\nThank you for taking part.\n\n" +
 			"Your responses were saved in\n" +
 			path + "\n\n" +
 			"This task is adapted from Cooper and Shepard (1973), \"The time required to prepare " +
 			"for a rotated stimulus\", Memory & Cognition, 1(3), 246-250.\n\n" +
 			"Press " + bold("any key") + " to close the window."
 	}
-	t.EndBrowser = "The experiment is over.\n\nThank you for taking part.\n\n" +
+	t.EndBrowser = "The experiment is over.\nThank you for taking part.\n\n" +
 		"This task is adapted from Cooper and Shepard (1973), \"The time required to prepare " +
 		"for a rotated stimulus\", Memory & Cognition, 1(3), 246-250.\n\n" +
 		"Press " + bold("any key") + " to finish."
@@ -130,27 +130,27 @@ func french() Texts {
 	t := Texts{Lang: "fr"}
 	t.Welcome = func(m KeyMapping) string {
 		return "Caractères tournés\n\n" +
-			"Dans cette expérience, vous verrez des lettres et des chiffres, un à la fois, dans un cercle.\n\n" +
+			"Dans cette expérience, vous verrez des lettres et des chiffres, un à la fois, dans un cercle.\n" +
 			"Chaque caractère peut être imprimé normalement ou en miroir.\n\n" +
-			"Appuyez sur " + boxed(up(m.NormalKey)) + " s'il est normal et sur " + boxed(up(m.BackwardKey)) + " s'il est en miroir.\n\n" +
-			"Répondez aussi vite que possible, en essayant de ne pas vous tromper. " +
+			"Appuyez sur " + boxed(up(m.NormalKey)) + " s'il est normal et sur " + boxed(up(m.BackwardKey)) + " s'il est en miroir.\n" +
+			"Répondez aussi vite que possible, en essayant de ne pas vous tromper.\n\n" +
 			"La séance dure environ dix minutes.\n\n" +
 			"Appuyez sur la " + bold("barre d'espace") + " pour continuer."
 	}
 	t.BlockTypes = "L'expérience est divisée en blocs de deux sortes.\n\n" +
 		"Dans certains blocs, le cercle reste vide un moment avant que le caractère apparaisse.\n\n" +
-		"Dans les autres blocs, vous voyez d'abord le contour du caractère à venir. " +
+		"Dans les autres blocs, vous voyez d'abord le contour du caractère à venir.\n" +
 		"Une flèche montre ensuite où pointera le haut du caractère, " +
 		"et le caractère apparaît dès que la flèche a disparu.\n\n" +
 		// "Le contour et la flèche sont toujours exacts, mais le caractère lui-même peut être en miroir.\n\n" +
 		"Appuyez sur la " + bold("barre d'espace") + " pour continuer."
 	t.Practice = func(n int) string {
-		return "Vous allez commencer par " + spelled(n, frNumbers) + " essais d'entraînement.\n\n" +
+		return "Vous allez commencer par " + spelled(n, frNumbers) + " essais d'entraînement.\n" +
 			"Placez votre index " + bold("gauche") + " sur " + boxed("F") + " et votre index " + bold("droit") + " sur " + boxed("J") + ".\n\n" +
 			"Appuyez sur la " + bold("barre d'espace") + " quand vous êtes prêt."
 	}
 	t.AfterPractice = func(nBlocks, nTrials int) string {
-		return "L'entraînement est terminé.\n\nL'expérience proprement dite comporte " + spelled(nBlocks, frNumbers) +
+		return "L'entraînement est terminé.\nL'expérience proprement dite comporte " + spelled(nBlocks, frNumbers) +
 			" blocs de " + strconv.Itoa(nTrials) + " essais, et vous pourrez vous reposer entre les blocs.\n\n" +
 			"Appuyez sur la " + bold("barre d'espace") + " pour commencer."
 	}
@@ -160,31 +160,31 @@ func french() Texts {
 		case KindN:
 			what = "Dans ce bloc, le cercle reste vide un moment avant que le caractère apparaisse."
 		case KindB:
-			what = "Dans ce bloc, vous verrez contour -> flèche -> caractère."
+			what = "Dans ce bloc, vous verrez\n" + boxed("contour") + " -> " + boxed("flèche") + " -> " + boxed("caractère") + "."
 		case KindC:
 			what = "Dans ce bloc, vous verrez le contour du caractère déjà incliné, " +
 				"puis un cercle vide, puis le caractère."
 		}
 		return fmt.Sprintf("Bloc %d sur %d\n\n", i, n) + what + "\n\n" +
-			"Appuyez sur " + up(m.NormalKey) + " pour normal et sur " + up(m.BackwardKey) + " pour miroir.\n\n" +
+			"Appuyez sur " + boxed(up(m.NormalKey)) + " pour normal et sur " + boxed(up(m.BackwardKey)) + " pour miroir.\n\n" +
 			"Appuyez sur la " + bold("barre d'espace") + " pour commencer."
 	}
 	t.BlockDone = func(i int) string {
-		return fmt.Sprintf("Fin du bloc %d.\n\nVous pouvez vous reposer un moment avant de continuer.", i)
+		return fmt.Sprintf("Fin du bloc %d.\nVous pouvez vous reposer un moment avant de continuer.", i)
 	}
 	t.Error = "Erreur"
 	t.TooSlow = "Trop lent"
-	t.DebriefPrompt = "Avant que le caractère n'apparaisse, avez-vous essayé de vous y préparer ? Si oui, comment ?"
-	t.DebriefHint = "Tapez votre réponse et appuyez sur Entrée pour continuer."
+	t.DebriefPrompt = "Avant que le caractère n'apparaisse, avez-vous essayé de vous y préparer ?\nSi oui, comment ?"
+	t.DebriefHint = "Tapez votre réponse et appuyez sur " + bold("Entrée") + " pour continuer."
 	t.End = func(path string) string {
-		return "L'expérience est terminée. Merci de votre participation.\n\n" +
+		return "L'expérience est terminée.\nMerci de votre participation.\n\n" +
 			"Vos réponses ont été enregistrées dans\n" +
 			path + "\n\n" +
 			"Cette tâche est adaptée de Cooper et Shepard (1973), « The time required to prepare " +
 			"for a rotated stimulus », Memory & Cognition, 1(3), 246-250.\n\n" +
 			"Appuyez sur " + bold("une touche") + " pour fermer la fenêtre."
 	}
-	t.EndBrowser = "L'expérience est terminée.\n\nMerci de votre participation.\n\n" +
+	t.EndBrowser = "L'expérience est terminée.\nMerci de votre participation.\n\n" +
 		"Cette tâche est adaptée de Cooper et Shepard (1973), « The time required to prepare " +
 		"for a rotated stimulus », Memory & Cognition, 1(3), 246-250.\n\n" +
 		"Appuyez sur " + bold("une touche") + " pour terminer."

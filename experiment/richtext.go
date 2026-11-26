@@ -148,6 +148,10 @@ const (
 	richTextWidth  = 0.92 // of the drawing area, as goxpyriment's text boxes
 	richTextHeight = 0.92
 	minTextPt      = 12
+	// The font may shrink down to this fraction of the default size so that
+	// each line of the text stays on one screen line (as goxpyriment's own
+	// text boxes do).
+	keepBreaksFloor = 0.75
 )
 
 // richItem is one rendered segment, at a position in centre-origin, y-up
@@ -165,6 +169,9 @@ type richText struct {
 	boxLine    float32
 	boldShift  float32
 	color      sdl.Color
+	// OffsetY moves the whole text up (positive) or down (negative) from the
+	// centre of the screen, in pixels.
+	OffsetY float32
 }
 
 // newRichText lays out and renders text with the experiment's font, at the
@@ -178,35 +185,56 @@ func newRichText(exp *control.Experiment, text string) (*richText, error) {
 	var lines [][]word
 	var h, space float32
 	var width func(word) float32
-	for size := float32(math.Round(float64(exp.DefaultFontSize))); ; size-- {
+	// try lays the text out at one size. It keeps the font open when the
+	// layout is accepted by accept, and closes it otherwise.
+	try := func(size float32, accept func(fits, unwrapped bool) bool) (bool, error) {
 		f, err := control.FontFromMemory(fontData, size)
 		if err != nil {
-			return nil, fmt.Errorf("text font at %.0f pt: %w", size, err)
+			return false, fmt.Errorf("text font at %.0f pt: %w", size, err)
 		}
-		h = float32(f.Height())
+		fh := float32(f.Height())
 		sw, _, _ := f.StringSize(" ")
-		space = float32(sw)
-		width = func(w word) float32 {
+		fw := func(w word) float32 {
 			var total float32
 			for _, s := range w {
 				tw, _, _ := f.StringSize(s.text)
 				total += float32(tw)
 				if s.bold {
-					total += max(1, float32(math.Round(float64(h*boldShiftRatio))))
+					total += max(1, float32(math.Round(float64(fh*boldShiftRatio))))
 				}
 				if s.boxed {
-					total += 2 * boxPadX * h
+					total += 2 * boxPadX * fh
 				}
 			}
 			return total
 		}
-		var ok bool
-		lines, ok = wrapLines(src, width, space, maxW)
-		if (ok && float32(len(lines))*lineSpacing*h <= maxH) || size <= minTextPt {
-			font = f
-			break
+		ls, ok := wrapLines(src, fw, float32(sw), maxW)
+		fits := ok && float32(len(ls))*lineSpacing*fh <= maxH
+		if !accept(fits, len(ls) == len(src)) {
+			f.Close()
+			return false, nil
 		}
-		f.Close()
+		font, lines, h, space, width = f, ls, fh, float32(sw), fw
+		return true, nil
+	}
+	// First choice: the largest size, down to keepBreaksFloor of the default,
+	// at which every line written in the text fits on one screen line, so
+	// that a sentence is never split over two lines. Otherwise: the largest
+	// size at which the text fits the screen, wrapping the long lines.
+	largest := float32(math.Round(float64(exp.DefaultFontSize)))
+	floor := max(minTextPt, float32(math.Ceil(float64(keepBreaksFloor*largest))))
+	done := false
+	for size := largest; size >= floor && !done; size-- {
+		var err error
+		if done, err = try(size, func(fits, unwrapped bool) bool { return fits && unwrapped }); err != nil {
+			return nil, err
+		}
+	}
+	for size := largest; !done; size-- {
+		var err error
+		if done, err = try(size, func(fits, _ bool) bool { return fits || size <= minTextPt }); err != nil {
+			return nil, err
+		}
 	}
 	defer font.Close()
 
@@ -269,7 +297,7 @@ func newRichText(exp *control.Experiment, text string) (*richText, error) {
 func (rt *richText) Draw(s *apparatus.Screen) error {
 	r := s.Renderer
 	for _, it := range rt.items {
-		sx, sy := s.CenterToSDL(it.cx, it.cy)
+		sx, sy := s.CenterToSDL(it.cx, it.cy+rt.OffsetY)
 		dst := sdl.FRect{X: sx - it.w/2, Y: sy - it.h/2, W: it.w, H: it.h}
 		if it.boxed {
 			box := sdl.FRect{X: dst.X - rt.padX, Y: dst.Y - rt.padY, W: dst.W + 2*rt.padX, H: dst.H + 2*rt.padY}
