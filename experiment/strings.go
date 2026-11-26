@@ -74,18 +74,18 @@ func english() Texts {
 	}
 	t.BlockTypes = "The experiment is divided into blocks of two kinds.\n\n" +
 		"In some blocks, the circle stays empty for a moment before the character appears.\n\n" +
-		"In the other blocks, you first see the outline of the coming character, upright and " +
-		"in its normal form. An arrow then shows where the top of the character will point, " +
+		"In the other blocks, you first see the outline of the coming character. " +
+		"An arrow then shows where the top of the character will point, " +
 		"and the character appears as soon as the arrow is gone.\n\n" +
 		// "The outline and the arrow are always correct, but the character itself may still be mirrored.\n\n" +
 		"Press the " + bold("space bar") + " to continue."
 	t.Practice = func(n int) string {
-		return "You will begin with " + spelled(n, enNumbers) + " practice trials. " +
-			"Place your left index finger on F and your right index finger on J.\n\n" +
+		return "You will begin with " + spelled(n, enNumbers) + " practice trials.\n\n" +
+			"Place your " + bold("left") + " index finger on " + boxed("F") + " and your " + bold("right") + " index finger on " + boxed("J") + ".\n\n" +
 			"Press the " + bold("space bar") + " when you are ready."
 	}
 	t.AfterPractice = func(nBlocks, nTrials int) string {
-		return "The practice is over. The experiment itself has " + spelled(nBlocks, enNumbers) +
+		return "The practice is over.\n\nThe experiment itself has " + spelled(nBlocks, enNumbers) +
 			" blocks of " + strconv.Itoa(nTrials) + " trials, and you can rest between blocks.\n\n" +
 			"Press the " + bold("space bar") + " to begin."
 	}
@@ -95,7 +95,7 @@ func english() Texts {
 		case KindN:
 			what = "In this block, the circle stays empty for a moment before the character appears."
 		case KindB:
-			what = "In this block, you will see the outline of the character, then the arrow, then the character."
+			what = "In this block, you will see outline -> arrow -> character."
 		case KindC: // not in the default design; no wording was specified for it
 			what = "In this block, you will see the outline of the character already tilted, " +
 				"then an empty circle, then the character."
@@ -105,7 +105,7 @@ func english() Texts {
 			"Press the " + bold("space bar") + " to begin."
 	}
 	t.BlockDone = func(i int) string {
-		return fmt.Sprintf("End of block %d. You may rest for a moment before continuing.", i)
+		return fmt.Sprintf("End of block %d.\n\nYou may rest for a moment before continuing.", i)
 	}
 	t.Error = "Error"
 	t.TooSlow = "Too slow"
@@ -117,12 +117,12 @@ func english() Texts {
 			path + "\n\n" +
 			"This task is adapted from Cooper and Shepard (1973), \"The time required to prepare " +
 			"for a rotated stimulus\", Memory & Cognition, 1(3), 246-250.\n\n" +
-			"Press any key to close the window."
+			"Press " + bold("any key") + " to close the window."
 	}
-	t.EndBrowser = "The experiment is over. Thank you for taking part.\n\n" +
+	t.EndBrowser = "The experiment is over.\n\nThank you for taking part.\n\n" +
 		"This task is adapted from Cooper and Shepard (1973), \"The time required to prepare " +
 		"for a rotated stimulus\", Memory & Cognition, 1(3), 246-250.\n\n" +
-		"Press any key to finish."
+		"Press " + bold("any key") + " to finish."
 	return t
 }
 
@@ -139,18 +139,18 @@ func french() Texts {
 	}
 	t.BlockTypes = "L'expérience est divisée en blocs de deux sortes.\n\n" +
 		"Dans certains blocs, le cercle reste vide un moment avant que le caractère apparaisse.\n\n" +
-		"Dans les autres blocs, vous voyez d'abord le contour du caractère à venir, droit et " +
-		"sous sa forme normale. Une flèche montre ensuite où pointera le haut du caractère, " +
+		"Dans les autres blocs, vous voyez d'abord le contour du caractère à venir. " +
+		"Une flèche montre ensuite où pointera le haut du caractère, " +
 		"et le caractère apparaît dès que la flèche a disparu.\n\n" +
 		// "Le contour et la flèche sont toujours exacts, mais le caractère lui-même peut être en miroir.\n\n" +
 		"Appuyez sur la " + bold("barre d'espace") + " pour continuer."
 	t.Practice = func(n int) string {
-		return "Vous allez commencer par " + spelled(n, frNumbers) + " essais d'entraînement. " +
-			"Placez votre index gauche sur F et votre index droit sur J.\n\n" +
+		return "Vous allez commencer par " + spelled(n, frNumbers) + " essais d'entraînement.\n\n" +
+			"Placez votre index " + bold("gauche") + " sur " + boxed("F") + " et votre index " + bold("droit") + " sur " + boxed("J") + ".\n\n" +
 			"Appuyez sur la " + bold("barre d'espace") + " quand vous êtes prêt."
 	}
 	t.AfterPractice = func(nBlocks, nTrials int) string {
-		return "L'entraînement est terminé. L'expérience proprement dite comporte " + spelled(nBlocks, frNumbers) +
+		return "L'entraînement est terminé.\n\nL'expérience proprement dite comporte " + spelled(nBlocks, frNumbers) +
 			" blocs de " + strconv.Itoa(nTrials) + " essais, et vous pourrez vous reposer entre les blocs.\n\n" +
 			"Appuyez sur la " + bold("barre d'espace") + " pour commencer."
 	}
@@ -160,7 +160,7 @@ func french() Texts {
 		case KindN:
 			what = "Dans ce bloc, le cercle reste vide un moment avant que le caractère apparaisse."
 		case KindB:
-			what = "Dans ce bloc, vous verrez le contour du caractère, puis la flèche, puis le caractère."
+			what = "Dans ce bloc, vous verrez contour -> flèche -> caractère."
 		case KindC:
 			what = "Dans ce bloc, vous verrez le contour du caractère déjà incliné, " +
 				"puis un cercle vide, puis le caractère."
@@ -170,7 +170,7 @@ func french() Texts {
 			"Appuyez sur la " + bold("barre d'espace") + " pour commencer."
 	}
 	t.BlockDone = func(i int) string {
-		return fmt.Sprintf("Fin du bloc %d. Vous pouvez vous reposer un moment avant de continuer.", i)
+		return fmt.Sprintf("Fin du bloc %d.\n\nVous pouvez vous reposer un moment avant de continuer.", i)
 	}
 	t.Error = "Erreur"
 	t.TooSlow = "Trop lent"
@@ -182,11 +182,11 @@ func french() Texts {
 			path + "\n\n" +
 			"Cette tâche est adaptée de Cooper et Shepard (1973), « The time required to prepare " +
 			"for a rotated stimulus », Memory & Cognition, 1(3), 246-250.\n\n" +
-			"Appuyez sur une touche pour fermer la fenêtre."
+			"Appuyez sur " + bold("une touche") + " pour fermer la fenêtre."
 	}
-	t.EndBrowser = "L'expérience est terminée. Merci de votre participation.\n\n" +
+	t.EndBrowser = "L'expérience est terminée.\n\nMerci de votre participation.\n\n" +
 		"Cette tâche est adaptée de Cooper et Shepard (1973), « The time required to prepare " +
 		"for a rotated stimulus », Memory & Cognition, 1(3), 246-250.\n\n" +
-		"Appuyez sur une touche pour terminer."
+		"Appuyez sur " + bold("une touche") + " pour terminer."
 	return t
 }

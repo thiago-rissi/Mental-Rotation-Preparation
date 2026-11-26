@@ -32,13 +32,17 @@ Press the space bar to continue.`},
 
 In some blocks, the circle stays empty for a moment before the character appears.
 
-In the other blocks, you first see the outline of the coming character, upright and in its normal form. An arrow then shows where the top of the character will point, and the character appears as soon as the arrow is gone.
+In the other blocks, you first see the outline of the coming character. An arrow then shows where the top of the character will point, and the character appears as soon as the arrow is gone.
 
 Press the space bar to continue.`},
-		"practice": {tx.Practice(6), `You will begin with six practice trials. Place your left index finger on F and your right index finger on J.
+		"practice": {tx.Practice(6), `You will begin with six practice trials.
+
+Place your left index finger on F and your right index finger on J.
 
 Press the space bar when you are ready.`},
-		"after practice": {tx.AfterPractice(6, 24), `The practice is over. The experiment itself has six blocks of 24 trials, and you can rest between blocks.
+		"after practice": {tx.AfterPractice(6, 24), `The practice is over.
+
+The experiment itself has six blocks of 24 trials, and you can rest between blocks.
 
 Press the space bar to begin.`},
 		"block N": {tx.BlockIntro(conditionCatalog["N"], 1, 6, m), `Block 1 of 6
@@ -48,11 +52,13 @@ In this block, the circle stays empty for a moment before the character appears.
 Press J for normal and F for mirrored.
 
 Press the space bar to begin.`},
-		"block B after a break": {tx.BlockDone(2) + "\n\n" + tx.BlockIntro(conditionCatalog["B400"], 3, 6, KeyMapping{NormalKey: "f", BackwardKey: "j"}), `End of block 2. You may rest for a moment before continuing.
+		"block B after a break": {tx.BlockDone(2) + "\n\n" + tx.BlockIntro(conditionCatalog["B400"], 3, 6, KeyMapping{NormalKey: "f", BackwardKey: "j"}), `End of block 2.
+
+You may rest for a moment before continuing.
 
 Block 3 of 6
 
-In this block, you will see the outline of the character, then the arrow, then the character.
+In this block, you will see outline -> arrow -> character.
 
 Press F for normal and J for mirrored.
 
@@ -65,7 +71,9 @@ C:\data\x.csv
 This task is adapted from Cooper and Shepard (1973), "The time required to prepare for a rotated stimulus", Memory & Cognition, 1(3), 246-250.
 
 Press any key to close the window.`},
-		"end (browser)": {tx.EndBrowser, `The experiment is over. Thank you for taking part.
+		"end (browser)": {tx.EndBrowser, `The experiment is over.
+
+Thank you for taking part.
 
 This task is adapted from Cooper and Shepard (1973), "The time required to prepare for a rotated stimulus", Memory & Cognition, 1(3), 246-250.
 

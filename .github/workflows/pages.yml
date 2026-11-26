@@ -56,9 +56,12 @@ jobs:
       - uses: actions/configure-pages@v5
 
       # The report is the README at the root of the repository. Its links to
-      # website/ become links from the root of the site.
+      # website/ become links from the root of the site, and the results of
+      # data_analysis.ipynb, in analysis/, are copied next to it.
       - name: Use the README as the home page of the site
-        run: sed 's#](website/#](#g' README.md > website/index.md
+        run: |
+          sed 's#](website/#](#g' README.md > website/index.md
+          cp -r analysis website/analysis
 
       - name: Build the report with Jekyll (theme and colours from website/)
         uses: actions/jekyll-build-pages@v1

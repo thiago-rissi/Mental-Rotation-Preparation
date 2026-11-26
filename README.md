@@ -72,7 +72,37 @@ After the character appears, the participant has 3000 ms to respond. A wrong ans
 
 ## Results
 
-To be completed after data collection.
+The results below come from example data, not from participants. To test the analysis before data collection, the notebook simulates 12 participants whose mean response times follow Figure 2 of Cooper and Shepard (1973). These results will be replaced by those of the real participants.
+
+The analysis is in [data_analysis.ipynb](https://github.com/thiago-rissi/Mental-Rotation-Preparation/blob/main/data_analysis.ipynb), and its figures and tables are saved in the folder [analysis](https://github.com/thiago-rissi/Mental-Rotation-Preparation/tree/main/analysis). Response times are computed on correct trials only, which leaves 1631 of the 1728 trials.
+
+![Mean response time by orientation, example data](analysis/rt_by_orientation.png)
+
+The figure is the equivalent of Figure 2 of Cooper and Shepard (1973): the mean response time as a function of the orientation of the character, for each condition, with the points at 360 degrees repeating those at 0 degrees.
+
+For the statistical tests, we used the angular departure rather than the orientation, and all three conditions. The mean response times, by angular departure, are:
+
+Condition | 0°   | 60°  | 120° | 180°
+--------- | ---- | ---- | ---- | ----
+N         | 616  | 702  | 852  | 1128
+B-400     | 483  | 512  | 613  | 878
+B-1000    | 430  | 435  | 486  | 495
+
+We ran a repeated-measures analysis of variance on the mean response times of each participant, with condition, angular departure and version as factors. Each effect is tested against its own interaction with the participants, and the p-values are corrected for sphericity (Greenhouse-Geisser).
+
+Effect                                     | F     | df     | p      | partial η²
+------------------------------------------ | ----- | ------ | ------ | ----------
+condition                                  | 431.0 | 2, 22  | < .001 | 0.98
+angular departure                          | 473.7 | 3, 33  | < .001 | 0.98
+version                                    | 594.9 | 1, 11  | < .001 | 0.98
+condition x angular departure              | 131.8 | 6, 66  | < .001 | 0.92
+condition x version                        | 2.19  | 2, 22  | .143   | 0.17
+angular departure x version                | 0.49  | 3, 33  | .637   | 0.04
+condition x angular departure x version    | 1.48  | 6, 66  | .235   | 0.12
+
+To measure the cost of the angle, we fitted for each participant and condition a line to the response time as a function of the angular departure. The mean slope is 2.81 ms per degree in condition N, 2.14 in condition B-400 and 0.41 in condition B-1000. The three slopes differ from each other (paired t-tests with Holm correction, p < .001 for each pair). In these example data, the slope of B-1000 is still above zero (t(11) = 8.68, p < .001), because the simulated means include the small rise of the original B-1000 curve.
+
+Mirror-image characters were classified 69 ms more slowly than normal characters (t(11) = 14.74, p < .001), and this difference does not depend on the condition or the angle.
 
 
 ## Running the experiment
